@@ -1,0 +1,113 @@
+CREATE TABLE IF NOT EXISTS folders (
+    ID INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    created_date DATE NOT NULL,
+    accessed_date DATE NOT NULL,
+    modified_date DATE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS files (
+    ID INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    folder_ID INT UNSIGNED NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    created_date DATE NOT NULL,
+    accessed_date DATE NOT NULL,
+    modified_date DATE NOT NULL,
+    file_size_bytes MEDIUMINT UNSIGNED NOT NULL,
+    FOREIGN KEY (folder_ID) REFERENCES folders(ID)
+);
+
+INSERT INTO folders (name, created_date, accessed_date, modified_date) VALUES 
+('data_driven_apps', '2023-02-28', '2023-02-28', '2023-02-28'),
+('intro_to_programming', SUBDATE(CURDATE(), INTERVAL 1 WEEK), CURDATE(), CURDATE());
+
+INSERT INTO files (folder_ID, name, created_date, accessed_date, modified_date, file_size_bytes) VALUES 
+(1, 'working_with_multiple_tables', '2022-02-28', '2022-02-28', '2022-02-28', 1352),
+(2, 'introduction', CURDATE(), CURDATE(), CURDATE(), 2048);
+
+SELECT name FROM files WHERE folder_ID = 1;
+
+SELECT folders.name AS folder_name, files.name AS file_name 
+FROM files 
+INNER JOIN folders ON folder_ID = folders.ID 
+WHERE folders.ID = 1;
+
+SELECT folders.name AS folder_name, files.name AS file_name 
+FROM files 
+INNER JOIN folders ON folder_ID = folders.ID 
+WHERE folders.ID = 1 AND files.accessed_date < CURDATE() - INTERVAL 1 YEAR;
+
+SELECT folders.name AS folder_name, files.name AS file_name 
+FROM folders 
+LEFT JOIN files ON folders.ID = folder_ID;
+
+SELECT folders.name AS folder_name, files.name AS file_name 
+FROM folders 
+LEFT JOIN files ON folders.ID = files.folder_ID 
+ORDER BY file_size_bytes;
+
+SELECT files.name AS file_name, folders.name AS folder_name 
+FROM files 
+INNER JOIN folders ON files.folder_ID = folders.ID;
+
+SELECT files.name AS file_name, folders.name AS folder_name 
+FROM files 
+INNER JOIN folders ON files.folder_ID = folders.ID 
+ORDER BY folders.name, files.file_size_bytes;
+
+SELECT files.name AS file_name, folders.name AS folder_name 
+FROM files 
+INNER JOIN folders ON files.folder_ID = folders.ID 
+WHERE files.created_date >= CURDATE() - INTERVAL 7 DAY;
+
+SELECT folders.name AS folder_name, 
+       (SELECT SUM(file_size_bytes) FROM files WHERE folder_ID = folders.ID) AS total_file_size 
+FROM folders 
+WHERE folders.ID = 1;
+
+SELECT name FROM folders 
+UNION 
+SELECT name FROM files;
+
+SELECT name, created_date, accessed_date FROM folders 
+UNION 
+SELECT name, created_date, accessed_date FROM files;
+
+CREATE TABLE IF NOT EXISTS authors (
+    ID INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS books (
+    ID INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS author_book (
+    author_ID INT UNSIGNED NOT NULL,
+    book_ID INT UNSIGNED NOT NULL,
+    FOREIGN KEY (author_ID) REFERENCES authors(ID),
+    FOREIGN KEY (book_ID) REFERENCES books(ID),
+    PRIMARY KEY (author_ID, book_ID)
+);
+
+INSERT INTO authors (first_name, last_name) VALUES 
+('Dylan', 'De Souza'), 
+('Toby', 'Coulstock'), 
+('Peter', 'Jones'), 
+('Kyan', 'Jones');
+
+INSERT INTO books (title) VALUES 
+('MySQL'), 
+('Maths'), 
+('Physical Education Studies'), 
+('Piazza');
+
+INSERT INTO author_book (author_ID, book_ID) VALUES 
+(1, 1), (2, 2), (3, 3), (4, 3);
+
+SELECT authors.first_name, authors.last_name, books.title 
+FROM authors 
+INNER JOIN author_book ON authors.ID = author_book.author_ID 
+INNER JOIN books ON author_book.book_ID = books.ID;
