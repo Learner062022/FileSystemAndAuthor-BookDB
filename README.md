@@ -1,4 +1,4 @@
-# FileSystemAndAuthor-BookDB
+# FileSystemAndAuthorBookDB
 
 This repository contains SQL scripts to create and manage a simple database for a file system and an author-book relationship. The script includes commands to create tables, insert records, and execute various queries to retrieve data from these tables.
 
