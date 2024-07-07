@@ -3,6 +3,7 @@
 This repository contains SQL scripts to create and manage a simple database for a file system and an author-book relationship. The script includes commands to create tables, insert records, and execute various queries to retrieve data from these tables.
 
 ## Purpose
+
 This project provides a structured way to manage and query a hierarchical file system and a many-to-many relationship between authors and books. It is useful for anyone looking to understand or implement database design and querying techniques for these common scenarios.
 
 ## Tables
@@ -11,50 +12,59 @@ This project provides a structured way to manage and query a hierarchical file s
 
 Stores information about folders.
 
-- **Columns:**
-  - **`ID`**: Unique identifier for each folder.
-  - **`name`**: Name of the folder.
-  - **`created_date`**: Date when the folder was created.
-  - **`accessed_date`**: Date when the folder was last accessed.
-  - **`modified_date`**: Date when the folder was last modified.
+**Columns:**
+
+- **ID**: Unique identifier for each folder.
+- **name**: Name of the folder.
+- **created_date**: Date when the folder was created.
+- **accessed_date**: Date when the folder was last accessed.
+- **modified_date**: Date when the folder was last modified.
 
 ### Files
 
 Stores information about files.
 
-- **Columns:**
-  - **`ID`**: Unique identifier for each file.
-  - **`folder_ID`**: Identifier of the folder the file belongs to.
-  - **`name`**: Name of the file.
-  - **`created_date`**: Date when the file was created.
-  - **`accessed_date`**: Date when the file was last accessed.
-  - **`modified_date`**: Date when the file was last modified.
-  - **`file_size_bytes`**: Size of the file in bytes.
+**Columns:**
+
+- **ID**: Unique identifier for each file.
+- **folder_ID**: Identifier of the folder the file belongs to (foreign key referencing `folders.ID`).
+- **name**: Name of the file.
+- **created_date**: Date when the file was created.
+- **accessed_date**: Date when the file was last accessed.
+- **modified_date**: Date when the file was last modified.
+- **file_size_bytes**: Size of the file in bytes.
 
 ### Authors
 
 Stores information about authors.
 
-- **Columns:**
-  - **`ID`**: Unique identifier for each author.
-  - **`first_name`**: First name of the author.
-  - **`last_name`**: Last name of the author.
+**Columns:**
+
+- **ID**: Unique identifier for each author.
+- **first_name**: First name of the author.
+- **last_name**: Last name of the author.
 
 ### Books
 
 Stores information about books.
 
-- **Columns:**
-  - **`ID`**: Unique identifier for each book.
-  - **`title`**: Title of the book.
+**Columns:**
+
+- **ID**: Unique identifier for each book.
+- **title**: Title of the book.
 
 ### Author_Book
 
 Join table for authors and books.
 
-- **Columns:**
-  - **`author_ID`**: Identifier of the author.
-  - **`book_ID`**: Identifier of the book.
+**Columns:**
+
+- **author_ID**: Identifier of the author (foreign key referencing `authors.ID`).
+- **book_ID**: Identifier of the book (foreign key referencing `books.ID`).
+
+**Primary Key:**
+
+- Composite key consisting of `author_ID` and `book_ID`.
 
 ## Queries
 
@@ -80,21 +90,17 @@ Join table for authors and books.
 
 To use the script, follow these steps:
 
-## Usage
-
-To use the script, follow these steps:
-
 ### Using MySQL:
 
 1. **Clone the repository:**
     ```sh
     git clone https://github.com/Learner062022/FileSystemAndAuthorBookDB.git
     ```
-2. Navigate to the repository directory:
+2. **Navigate to the repository directory:**
     ```sh
     cd FileSystemAndAuthorBookDB
     ```
-3. Execute the SQL script:
+3. **Execute the SQL script:**
     ```sh
     mysql -u <username> -p <database_name> < WorkingWithMultipleTables
     ```
@@ -104,11 +110,11 @@ To use the script, follow these steps:
 1. Open the MySQL Online Editor.
 2. Copy and paste the content of the `WorkingWithMultipleTables` file into the editor.
 3. Execute the script.
-   
-# Contributing
+
+## Contributing
+
 Contributions are welcome! Please fork the repository and create a pull request with your changes. Ensure that your code adheres to the established style and conventions, and that you include appropriate tests.
 
-# License
-This project is licensed under the [GNU General Public License](https://www.gnu.org/licenses/gpl-3.0.txt).
+## License
 
-For detailed information and the complete SQL script, refer to the **'WorkingWithMultipleTables'** file in the repository.
+This project is licensed under the [GNU General Public License](https://www.gnu.org/licenses/gpl-3.0.txt).
